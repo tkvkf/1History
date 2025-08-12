@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>한국사 연표 퀴즈</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="quiz-box">
+        <br>
+        <div id="question"></div>
+        <br>
+        <input type="text" id="answer" placeholder="연도를 입력하세요" autocomplete="off">
+        <div id="result"></div>
+        <button id="submitBtn" onclick="checkAnswer()">제출</button>
+        <button id="nextBtn" onclick="nextQuestion()" style="display:none;">다음 문제</button>
+        <button id="endBtn" onclick="endQuiz()" style="display:none;">끝내기</button>
+    </div>
+    <script>
+        // 예시 문제 데이터
+        const quizData = [
+            { event: "3·1 운동", year: "1919", tags: ["일제강점기", "독립운동"] },
+            { event: "광복", year: "1945", tags: ["광복", "일제강점기"] },
+            { event: "대한민국 임시정부 수립", year: "1919", tags: ["일제강점기", "독립운동"] },
+            { event: "신민회 결성", year: "1907", tags: ["독립운동"] },
+            { event: "을사늑약", year: "1905", tags: ["일제강점기"] }
+        ];
+
+        // 쿼리스트링 파싱
+        function getQueryParams() {
+            const params = {};
+            location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) {
+                params[key] = decodeURIComponent(value);
+            });
+            return params;
+        }
+
+        const params = getQueryParams();
+        const tag = params.tag || "all";
+        const startYear = parseInt(params.startYear) || 1900;
+        const endYear = parseInt(params.endYear) || 2020;
+
+        // 문제 필터링
+        let filtered = quizData.filter(q => {
+            const year = parseInt(q.year);
+            return (tag === "all" || q.tags.includes(tag)) && year >= startYear && year <= endYear;
+        });
+
+        let current = 0;
+        let answered = false;
+
+        function showQuestion() {
+            answered = false;
+            document.getElementById('result').textContent = '';
+            document.getElementById('answer').value = '';
+            if (filtered.length === 0) {
+                document.getElementById('question').textContent = "해당 조건의 문제가 없습니다.";
+                document.getElementById('submitBtn').style.display = "none";
+                document.getElementById('nextBtn').style.display = "none";
+                document.getElementById('endBtn').style.display = "inline-block";
+                return;
+            }
+            document.getElementById('question').textContent =
+                `"${filtered[current].event}"는 몇 년도에 일어났나요?`;
+            document.getElementById('submitBtn').style.display = "inline-block";
+            document.getElementById('nextBtn').style.display = "none";
+            document.getElementById('endBtn').style.display = "none";
+        }
+
+        function checkAnswer() {
+            if (answered) return;
+            const userAnswer = document.getElementById('answer').value.trim();
+            if (userAnswer === filtered[current].year) {
+                document.getElementById('result').textContent = "정답입니다!";
+            } else {
+                document.getElementById('result').textContent = `오답입니다. 정답: ${filtered[current].year}년`;
+            }
+            answered = true;
+            document.getElementById('submitBtn').style.display = "none";
+            if (current < filtered.length - 1) {
+                document.getElementById('nextBtn').style.display = "inline-block";
+            } else {
+                document.getElementById('endBtn').style.display = "inline-block";
+            }
+        }
+
+        function nextQuestion() {
+            if (current < filtered.length - 1) {
+                current++;
+                showQuestion();
+            }
+        }
+
+        function endQuiz() {
+            window.location.href = "result.html";
+        }
+
+        // 첫 문제 표시
+        showQuestion();
+
+        // 엔터키로 제출 또는 다음 문제/끝내기
+        document.getElementById('answer').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                if (!answered) {
+                    checkAnswer();
+                } else {
+                    if (current < filtered.length - 1) {
+                        nextQuestion();
+                    } else {
+                        endQuiz();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,10 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2025 한국사</title>
+    <title>한국사퀴즈</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <div>
+        <h1>2<span style="color: #66cc33;">0</span>25 2학기 한국사 연표 퀴즈</h1>
+        <h3>특정 요소와 관련된 사건, 특정 기간을 선택하여 시작하세요.</h3>
+        <h3>원하는 요소, 기간이 없다면 태그는 전체, 기간 또한 전체기간으로 설정하면 됩니다.</h3>
+    </div>
+    <br><br><br><br>
+    <div>
+        <label>태그 선택:
+            <select id="tagSelect">
+                <option value="all">전체</option>
+                <option value="일제강점기">일제강점기</option>
+                <option value="광복">광복</option>
+                <option value="독립운동">독립운동</option>
+            </select>
+        </label>
+        <br><br>
+        <label>기간 선택 : <input type="number" id="startYear" min="1900" max="2020" value="1900"></label>
+        <label> ~ <input type="number" id="endYear" min="1900" max="2020" value="2020"></label>
+        <br><br><br>
+        <button onclick="goQuizPage()">시작하기</span></button>
+    </div>
+    <br><br><br>
+    <script>
+        function goQuizPage() {
+            const tag = document.getElementById('tagSelect').value;
+            const startYear = parseInt(document.getElementById('startYear').value, 10);
+            const endYear = parseInt(document.getElementById('endYear').value, 10);
+
+            if (startYear > endYear) {
+                document.getElementById('endYear').value = startYear;
+                alert("시작 연도는 끝 연도보다 작거나 같아야 합니다.\n\n끝 연도를 시작 연도로 맞추겠습니다.");
+                return;
+            }
+            window.location.href = `quiz.html?tag=${encodeURIComponent(tag)}&startYear=${encodeURIComponent(startYear)}&endYear=${encodeURIComponent(endYear)}`;
+        }
+    </script>
 </body>
+
 </html>
