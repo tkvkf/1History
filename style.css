@@ -42,6 +42,35 @@ label {
     font-size: 1.1rem;
 }
 
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.box {
+    background-color: #181818;
+    padding: 10px 16px;
+    border-radius: 8px;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #181818;
+    transition: background-color 0.2s;
+}
+
+.box:hover {
+    background-color: #000000;
+}
+
+.box:checked {
+    background-color: #000000;
+    border-color: #66cc33;
+}
+
 button {
     font-size: 1.1rem;
     padding: 10px 32px;

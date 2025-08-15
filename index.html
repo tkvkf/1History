@@ -16,33 +16,61 @@
     </div>
     <br><br><br><br>
     <div>
-        <label>태그 선택:
-            <select id="tagSelect">
-                <option value="all">전체</option>
-                <option value="일제강점기">일제강점기</option>
-                <option value="광복">광복</option>
-                <option value="독립운동">독립운동</option>
-            </select>
-        </label>
+        <div>
+            <label>태그 선택 :</label>
+            <label class="box"><input type="checkbox" id="selectAll" value="all">전체 선택</label>
+
+            <div class="tag-container">
+                <label class="box"><input type="checkbox" name="tags" value="일제강점기"> 일제강점기</label>
+                <label class="box"><input type="checkbox" name="tags" value="광복"> 광복</label>
+                <label class="box"><input type="checkbox" name="tags" value="독립운동"> 독립운동</label>
+                <label class="box"><input type="checkbox" name="tags" value="한국전쟁"> 한국전쟁</label>
+            </div>
+        </div>
         <br><br>
-        <label>기간 선택 : <input type="number" id="startYear" min="1900" max="2020" value="1900"></label>
-        <label> ~ <input type="number" id="endYear" min="1900" max="2020" value="2020"></label>
-        <br><br><br>
-        <button onclick="goQuizPage()">시작하기</span></button>
+        <div>
+            <label>기간 선택 : <input type="number" id="startYear" min="1900" max="2020" value="1900"></label>
+            <label> ~ <input type="number" id="endYear" min="1900" max="2020" value="2020"></label>
+        </div>
+        <br><br>
+        <div>
+            <label class="box"><input type="checkbox" name="mode">랜덤순서</label>
+        </div>
+        <button onclick="goQuizPage()">시작하기</button>
     </div>
     <br><br><br>
     <script>
+        const selectAll = document.getElementById('selectAll');
+        const tagBoxes = document.querySelectorAll('input[name="tags"]');
+
+        selectAll.addEventListener('change', function () {
+            tagBoxes.forEach(box => {
+                box.checked = selectAll.checked;
+            });
+        });
+
+        tagBoxes.forEach(box => {
+            box.addEventListener('change', function () {
+                const allChecked = Array.from(tagBoxes).every(box => box.checked);
+                selectAll.checked = allChecked;
+            });
+        });
+
         function goQuizPage() {
-            const tag = document.getElementById('tagSelect').value;
+            const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked'))
+                .map(tag => tag.value);
             const startYear = parseInt(document.getElementById('startYear').value, 10);
             const endYear = parseInt(document.getElementById('endYear').value, 10);
+            const mode = document.querySelector('input[name="mode"]').checked;
 
             if (startYear > endYear) {
                 document.getElementById('endYear').value = startYear;
                 alert("시작 연도는 끝 연도보다 작거나 같아야 합니다.\n\n끝 연도를 시작 연도로 맞추겠습니다.");
                 return;
             }
-            window.location.href = `quiz.html?tag=${encodeURIComponent(tag)}&startYear=${encodeURIComponent(startYear)}&endYear=${encodeURIComponent(endYear)}`;
+            const tag = selectedTags.length > 0 ? selectedTags.join(",") : 'all';
+
+            window.location.href = `quiz.html?tag=${encodeURIComponent(tag)}&startYear=${encodeURIComponent(startYear)}&endYear=${encodeURIComponent(endYear)}&mode=${encodeURIComponent(mode)}`;
         }
     </script>
 </body>
