@@ -20,7 +20,7 @@ body {
 }
 
 h1 {
-    margin: 3% 0 5%;
+    margin: 3% 0 3%;
     font-size: 5vw;
     color: #fff;
     text-align: center;
@@ -34,8 +34,9 @@ h3 {
 }
 
 h5 {
-    margin-top: 8%;
+    margin-top: 7%;
     color: #555555;
+    text-align: left    ;
 }
 
 label {
@@ -89,6 +90,16 @@ button:active {
 #quiz-box {
     margin: 180px auto 0 auto;
     padding: 32px;
+    background: #222;
+    border-radius: 16px;
+    display: inline-block;
+    min-width: 320px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+#end-box {
+    margin: 200px auto 0 auto;
+    padding: 30px;
     background: #222;
     border-radius: 16px;
     display: inline-block;

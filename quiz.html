@@ -20,12 +20,17 @@
     </div>
     <script>
         let quizData = [];
+        let current = 0;
+        let answered = false;
+        let filtered = [];
+        let score = 0;
 
         function getQueryParams() {
             const params = {};
-            location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (str, key, value) {
-                params[key] = decodeURIComponent(value);
-            });
+            const searchParams = new URLSearchParams(location.search);
+            for (const [key, value] of searchParams.entries()) {
+                params[key] = value;
+            }
             return params;
         }
 
@@ -48,7 +53,7 @@
             const endYear = (parseFloat(params.endYear, 10) || 2020) + 0.99;
             const mode = params.mode === "true";
 
-            let filtered = quizData.filter(q => {
+            filtered = quizData.filter(q => {
                 const year = parseFloat(q.year);
                 const tagMatch = selectedTags.includes("all") || q.tags.some(t => selectedTags.includes(t));
                 return tagMatch && year >= startYear && year <= endYear;
@@ -58,54 +63,6 @@
                 filtered = filtered.sort(() => Math.random() - 0.5);
             } else {
                 filtered.sort((a, b) => parseInt(a.year) - parseInt(b.year));
-            }
-
-            let current = 0;
-            let answered = false;
-
-            function showQuestion() {
-                answered = false;
-                document.getElementById('result').textContent = '';
-                document.getElementById('answer').value = '';
-                if (filtered.length === 0) {
-                    document.getElementById('question').textContent = "해당 조건의 문제가 없습니다.";
-                    document.getElementById('submitBtn').style.display = "none";
-                    document.getElementById('nextBtn').style.display = "none";
-                    document.getElementById('endBtn').style.display = "inline-block";
-                    return;
-                }
-                document.getElementById('question').textContent = `${current + 1}. "${filtered[current].event}"는 몇 년도에 일어났나요?`;
-                document.getElementById('submitBtn').style.display = "inline-block";
-                document.getElementById('nextBtn').style.display = "none";
-                document.getElementById('endBtn').style.display = "none";
-            }
-
-            function checkAnswer() {
-                if (answered) return;
-                const userAnswer = document.getElementById('answer').value.trim();
-                if (parseFloat(userAnswer, 10) === parseFloat(filtered[current].year, 10)) {
-                    document.getElementById('result').textContent = `정답입니다! ${current + 1} / ${filtered.length}`;
-                } else {
-                    document.getElementById('result').textContent = `오답입니다. 정답: ${filtered[current].year}년`;
-                }
-                answered = true;
-                document.getElementById('submitBtn').style.display = "none";
-                if (current < filtered.length - 1) {
-                    document.getElementById('nextBtn').style.display = "inline-block";
-                } else {
-                    document.getElementById('endBtn').style.display = "inline-block";
-                }
-            }
-
-            function nextQuestion() {
-                if (current < filtered.length - 1) {
-                    current++;
-                    showQuestion();
-                }
-            }
-
-            function endQuiz() {
-                window.location.href = "result.html";
             }
 
             showQuestion();
@@ -123,6 +80,51 @@
                     }
                 }
             });
+        }
+
+        function showQuestion() {
+            answered = false;
+            document.getElementById('result').textContent = '';
+            document.getElementById('answer').value = '';
+            if (filtered.length === 0) {
+                document.getElementById('question').textContent = "해당 조건의 문제가 없습니다.";
+                document.getElementById('submitBtn').style.display = "none";
+                document.getElementById('nextBtn').style.display = "none";
+                document.getElementById('endBtn').style.display = "inline-block";
+                return;
+            }
+            document.getElementById('question').textContent = `${current + 1}. "${filtered[current].event}"는 몇 년도에 일어났나요?`;
+            document.getElementById('submitBtn').style.display = "inline-block";
+            document.getElementById('nextBtn').style.display = "none";
+            document.getElementById('endBtn').style.display = "none";
+        }
+
+        function checkAnswer() {
+            if (answered) return;
+            const userAnswer = document.getElementById('answer').value.trim();
+            if (parseFloat(userAnswer, 10) === parseFloat(filtered[current].year, 10)) {
+                document.getElementById('result').textContent = `정답입니다! ${current + 1} / ${filtered.length}`; score++;
+            } else {
+                document.getElementById('result').textContent = `오답입니다. 정답: ${filtered[current].year}년`;
+            }
+            answered = true;
+            document.getElementById('submitBtn').style.display = "none";
+            if (current < filtered.length - 1) {
+                document.getElementById('nextBtn').style.display = "inline-block";
+            } else {
+                document.getElementById('endBtn').style.display = "inline-block";
+            }
+        }
+
+        function nextQuestion() {
+            if (current < filtered.length - 1) {
+                current++;
+                showQuestion();
+            }
+        }
+
+        function endQuiz() {
+            window.location.href = `end.html?score=${encodeURIComponent(score)}&total=${encodeURIComponent(filtered.length)}`;
         }
     </script>
 </body>

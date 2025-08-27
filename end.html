@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>결과</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    
+    <div id="end-box">
+        <h2>퀴즈 결과</h2>
+        <br>
+        <div id="score"></div>
+        <br>
+        <button onclick="goHome()">처음으로</button>
+
+
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const score = parseInt(urlParams.get('score'));
+            const total = parseInt(urlParams.get('total'));
+
+            document.getElementById('score').innerHTML = `총 ${total}문제 중 ${score}문제 맞히셨습니다!<br><br>정답률: ${parseFloat(((score / total) * 100).toFixed(1))}%`;
+            function goHome() {
+                window.location.href = "index.html";
+            }
+        </script>
 </body>
+
 </html>
