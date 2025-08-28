@@ -103,9 +103,9 @@
             if (answered) return;
             const userAnswer = document.getElementById('answer').value.trim();
             if (parseFloat(userAnswer, 10) === parseFloat(filtered[current].year, 10)) {
-                document.getElementById('result').textContent = `정답입니다! ${current + 1} / ${filtered.length}`; score++;
+                document.getElementById('result').innerHTML = `정답입니다!<br>${current + 1} / ${filtered.length}`; score++;
             } else {
-                document.getElementById('result').textContent = `오답입니다. 정답: ${filtered[current].year}년`;
+                document.getElementById('result').innerHTML = `오답입니다. 정답: ${filtered[current].year}년<br>${current + 1} / ${filtered.length}`;
             }
             answered = true;
             document.getElementById('submitBtn').style.display = "none";
