@@ -25,15 +25,6 @@
         let filtered = [];
         let score = 0;
 
-        function getQueryParams() {
-            const params = {};
-            const searchParams = new URLSearchParams(location.search);
-            for (const [key, value] of searchParams.entries()) {
-                params[key] = value;
-            }
-            return params;
-        }
-
         fetch("data.json")
             .then(response => response.json())
             .then(data => {
@@ -44,6 +35,15 @@
                 console.error('퀴즈 데이터 로드 실패:', error);
                 document.getElementById('question').textContent = "퀴즈 데이터를 불러오는 데 실패했습니다.";
             });
+
+        function getQueryParams() {
+            const params = {};
+            const searchParams = new URLSearchParams(location.search);
+            for (const [key, value] of searchParams.entries()) {
+                params[key] = value;
+            }
+            return params;
+        }
 
         function startQuiz() {
             const params = getQueryParams();
