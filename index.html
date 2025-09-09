@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>한국사퀴즈</title>
+    <title>한국사연표퀴즈</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -37,8 +37,10 @@
             <label class="box"><input type="checkbox" name="mode">랜덤순서</label>
         </div>
         <button onclick="goQuizPage()">시작하기</button>
+        <button onclick="goTablePage()">연표보기</button>
     </div>
-    <h5 style="color: #555555;">made by 범서 in <span style="color: #66cc33;">;</span> / 오류문의(인스타) : tkvkf_ (오류화면을 촬영해 보내주세요)</h5>
+    <h5 style="color: #555555;">made by 범서 in <span style="color: #66cc33;">;</span> / 오류문의(인스타) : tkvkf_ (오류화면을 촬영해
+        보내주세요)</h5>
     <script>
         const selectAll = document.getElementById('selectAll');
         const tagBoxes = document.querySelectorAll('input[name="tags"]');
@@ -71,6 +73,22 @@
             const tag = selectedTags.length > 0 ? selectedTags.join(",") : 'all';
 
             window.location.href = `quiz.html?tag=${encodeURIComponent(tag)}&startYear=${encodeURIComponent(startYear)}&endYear=${encodeURIComponent(endYear)}&mode=${encodeURIComponent(mode)}`;
+        }
+        function goTablePage() {
+            const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked'))
+                .map(tag => tag.value);
+            const startYear = parseInt(document.getElementById('startYear').value, 10);
+            const endYear = parseInt(document.getElementById('endYear').value, 10);
+            const mode = document.querySelector('input[name="mode"]').checked;
+
+            if (startYear > endYear) {
+                document.getElementById('endYear').value = startYear;
+                alert("시작 연도는 끝 년도보다 작거나 같아야 합니다.\n\n끝 년도를 시작 년도로 맞추겠습니다.");
+                return;
+            }
+            const tag = selectedTags.length > 0 ? selectedTags.join(",") : 'all';
+
+            window.location.href = `table.html?tag=${encodeURIComponent(tag)}&startYear=${encodeURIComponent(startYear)}&endYear=${encodeURIComponent(endYear)}&mode=${encodeURIComponent(mode)}`;
         }
     </script>
 </body>
