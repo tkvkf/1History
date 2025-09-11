@@ -84,11 +84,24 @@ button {
     cursor: pointer;
 }
 
+.-box {
+    background-color: #181818;
+    padding: 4px 15px;
+    border-radius: 8px;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    border: 1px solid #181818;
+    transition: background-color 0.2s;
+}
+
 button:active {
     background: #4e9926;
 }
 
-#quiz-box {
+#some-box {
     margin: 180px auto 0 auto;
     padding: 32px;
     background: #222;

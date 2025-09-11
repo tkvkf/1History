@@ -9,7 +9,62 @@
 </head>
 
 <body>
+    <div>
+        <button onclick="goHome()">처음으로</button>
+    </div>
+    <br>
+    <div class="tag-container">
+        <label class="-box"><input type="checkbox" name="tags" value="1"> 학습지 1번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="2"> 학습지 2번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="3"> 학습지 3번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="4"> 학습지 4번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="5"> 학습지 5번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="6"> 학습지 6번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="7"> 학습지 7번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="8"> 학습지 8번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="9"> 학습지 9번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="10"> 학습지 10번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="11"> 학습지 11번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="12"> 학습지 12번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="13"> 학습지 13번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="14"> 학습지 14번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="15"> 학습지 15번</label>
+        <label class="-box"><input type="checkbox" name="tags" value="16"> 학습지 16번</label>
+    </div>
+    <br>
+    <div>
+        <label>기간 선택 : <input type="number" id="startYear" min="1900" max="2020" value="1900"></label>
+        <label> ~ <input type="number" id="endYear" min="1900" max="2020" value="2020"></label>
+    </div>
+    <br>
+    <div>
+        <button onclick="start()">필터 적용</button>
+    </div>
+    <div id="some-box">
+        <br>
 
+    </div>
+
+    <script>
+        let Data = [];
+
+        fetch("data.json")
+            .then(response => response.json())
+            .then(data => {
+                Data = data;
+                start();
+            });
+        function start() {
+            if (startYear > endYear) {
+                document.getElementById('endYear').value = startYear;
+                alert("시작 연도는 끝 년도보다 작거나 같아야 합니다.\n\n끝 년도를 시작 년도로 맞추겠습니다.");
+                return;
+            }
+        }
+        function goHome() {
+            window.location.href = "index.html";
+        }
+    </script>
 </body>
 
 </html>
