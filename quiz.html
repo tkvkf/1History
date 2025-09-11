@@ -55,7 +55,7 @@
 
             filtered = quizData.filter(q => {
                 const year = parseFloat(q.year);
-                const tagMatch = selectedTags.includes("all") || q.tags.some(t => selectedTags.includes(t));
+                const tagMatch = selectedTags.includes("all") || selectedTags.includes(String(q.tags));
                 return tagMatch && year >= startYear && year <= endYear;
             });
 
