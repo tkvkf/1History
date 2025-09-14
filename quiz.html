@@ -59,10 +59,26 @@
                 return tagMatch && year >= startYear && year <= endYear;
             });
 
+            // 정렬 함수 (연도+월 정렬)
+            function parseYearMonth(str) {
+                const [y, m] = String(str).split(".");
+                return {
+                    year: parseInt(y, 10),
+                    month: m !== undefined ? parseInt(m, 10) : 0
+                };
+            }
+
             if (mode) {
+                // 랜덤 출제
                 filtered = filtered.sort(() => Math.random() - 0.5);
             } else {
-                filtered.sort((a, b) => parseInt(a.year) - parseInt(b.year));
+                // 연도+월 기준 오름차순 정렬
+                filtered.sort((a, b) => {
+                    const ay = parseYearMonth(a.year);
+                    const by = parseYearMonth(b.year);
+                    if (ay.year !== by.year) return ay.year - by.year;
+                    return ay.month - by.month;
+                });
             }
 
             showQuestion();
@@ -102,7 +118,8 @@
         function checkAnswer() {
             if (answered) return;
             const userAnswer = document.getElementById('answer').value.trim();
-            if (parseFloat(userAnswer, 10) === parseFloat(filtered[current].year, 10)) {
+            // 정답을 문자열로 비교 (예: "1920.1" === "1920.10"은 false)
+            if (userAnswer === String(filtered[current].year)) {
                 document.getElementById('result').innerHTML = `정답입니다!<br>${current + 1} / ${filtered.length}`; score++;
             } else {
                 document.getElementById('result').innerHTML = `오답입니다. 정답: ${filtered[current].year}년<br>${current + 1} / ${filtered.length}`;
