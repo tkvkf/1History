@@ -38,29 +38,96 @@
     </div>
     <br>
     <div>
-        <button onclick="start()">필터 적용</button>
+        <button onclick="filter()">필터 적용</button>
     </div>
-    <div id="some-box">
-        <br>
-
+    <br>
+    <div id="table-box">
+        <div id="table"></div>
     </div>
 
     <script>
         let Data = [];
+        let filtered = [];
 
         fetch("data.json")
             .then(response => response.json())
             .then(data => {
                 Data = data;
-                start();
+                filtered = [...Data];
+                renderTable(filtered);
+            })
+            .catch(error => {
+                console.error('데이터 로드 실패:', error);
+                document.getElementById('table').textContent = "데이터를 불러오는 데 실패했습니다.";
             });
-        function start() {
-            if (startYear > endYear) {
-                document.getElementById('endYear').value = startYear;
-                alert("시작 연도는 끝 년도보다 작거나 같아야 합니다.\n\n끝 년도를 시작 년도로 맞추겠습니다.");
+
+        function padMonth(str) {
+            const [y, m] = String(str).split(".");
+            return m ? `${y}.${parseInt(m)}` : `${y}`;
+        }
+
+        function parseYearMonth(str) {
+            const [y, m] = String(str).split(".");
+            return {
+                year: parseInt(y, 10),
+                month: m !== undefined ? parseInt(m, 10) : 0
+            };
+        }
+
+        function renderTable(data) {
+            if (!data.length) {
+                document.getElementById('table').innerHTML = "<div>해당 조건의 요소가 없습니다.</div>";
                 return;
             }
+            data.sort((a, b) => {
+                const ay = parseYearMonth(a.year);
+                const by = parseYearMonth(b.year);
+                if (ay.year !== by.year) return ay.year - by.year;
+                return ay.month - by.month;
+            });
+
+            let html = `<table>
+        <tr>
+            <th style="text-align:left; color:#66cc33;">연도</th>
+            <th style="color:#66cc33;">사건</th>
+            <th style="text-align:right; color:#66cc33;">학습지</th>
+        </tr>`;
+            data.forEach(item => {
+                html += `<tr>
+            <td style="text-align:left;">${padMonth(item.year)}</td>
+            <td>${item.event || ""}</td>
+            <td style="text-align:right;">${item.tags}</td>
+        </tr>`;
+            });
+            html += `</table>`;
+            document.getElementById('table').innerHTML = html;
         }
+
+        function filter() {
+            const checked = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(cb => cb.value);
+            const startYear = document.getElementById('startYear').value;
+            const endYear = document.getElementById('endYear').value;
+            const startYearStr = startYear.includes('.') ? padMonth(startYear) : `${startYear}.00`;
+            const endYearStr = endYear.includes('.') ? padMonth(endYear) : `${endYear}.12`;
+
+            filtered = Data.filter(item => {
+                const tagMatch = checked.length === 0 || checked.includes(String(item.tags));
+                const y = padMonth(item.year);
+                return tagMatch && y >= startYearStr && y <= endYearStr;
+            });
+
+            renderTable(filtered);
+        }
+
+        function getQueryParams() {
+            const params = {};
+            const searchParams = new URLSearchParams(location.search);
+            for (const [key, value] of searchParams.entries()) {
+                params[key] = value;
+            }
+            return params;
+        }
+        
         function goHome() {
             window.location.href = "index.html";
         }

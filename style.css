@@ -111,6 +111,16 @@ button:active {
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
 }
 
+#table-box {
+    margin: 20px auto 0 auto;
+    padding: 15px;
+    background: #222;
+    border-radius: 16px;
+    display: inline-block;
+    min-width: 320px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
 #end-box {
     margin: 200px auto 0 auto;
     padding: 30px;
@@ -121,10 +131,16 @@ button:active {
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
 }
 
-
 #question {
     font-size: 1.5rem;
     margin-bottom: 20px;
+}
+
+#table {
+    font-size: 1.7rem;
+    font-weight: lighter;
+    line-height: 1.4;
+    align-content: left;
 }
 
 #result {
