@@ -59,7 +59,6 @@
                 return tagMatch && year >= startYear && year <= endYear;
             });
 
-            // 정렬 함수 (연도+월 정렬)
             function parseYearMonth(str) {
                 const [y, m] = String(str).split(".");
                 return {
@@ -69,10 +68,8 @@
             }
 
             if (mode) {
-                // 랜덤 출제
                 filtered = filtered.sort(() => Math.random() - 0.5);
             } else {
-                // 연도+월 기준 오름차순 정렬
                 filtered.sort((a, b) => {
                     const ay = parseYearMonth(a.year);
                     const by = parseYearMonth(b.year);
@@ -109,7 +106,7 @@
                 document.getElementById('endBtn').style.display = "inline-block";
                 return;
             }
-            document.getElementById('question').textContent = `${current + 1}. "${filtered[current].event}"는 몇 년도에 일어났나요?`;
+            document.getElementById('question').textContent = `${current + 1}. "${filtered[current].event}"는 몇 년도에 일어났나요? ${filtered[current].year}`;
             document.getElementById('submitBtn').style.display = "inline-block";
             document.getElementById('nextBtn').style.display = "none";
             document.getElementById('endBtn').style.display = "none";
@@ -118,11 +115,10 @@
         function checkAnswer() {
             if (answered) return;
             const userAnswer = document.getElementById('answer').value.trim();
-            // 정답을 문자열로 비교 (예: "1920.1" === "1920.10"은 false)
-            if (userAnswer === String(filtered[current].year)) {
+            if (userAnswer === filtered[current].year) {
                 document.getElementById('result').innerHTML = `정답입니다!<br>${current + 1} / ${filtered.length}`; score++;
             } else {
-                document.getElementById('result').innerHTML = `오답입니다. 정답: ${filtered[current].year}년<br>${current + 1} / ${filtered.length}`;
+                document.getElementById('result').innerHTML = `오답입니다. 정답: ${filtered[current].year}<br>${current + 1} / ${filtered.length}`;
             }
             answered = true;
             document.getElementById('submitBtn').style.display = "none";
