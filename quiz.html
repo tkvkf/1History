@@ -19,6 +19,9 @@
         <button id="endBtn" onclick="endQuiz()" style="display:none;">끝내기</button>
     </div>
     <script>
+        window.onload = function() {
+            document.getElementById('answer').focus();
+        };
         let quizData = [];
         let current = 0;
         let answered = false;
