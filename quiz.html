@@ -49,8 +49,8 @@
             const params = getQueryParams();
             const tag = params.tag || "all";
             const selectedTags = tag === "all" ? ["all"] : tag.split(",");
-            const startYear = parseFloat(params.startYear, 10) || 1900;
-            const endYear = (parseFloat(params.endYear, 10) || 2020) + 0.99;
+            const startYear = parseFloat(params.startYear, 10) || 1890;
+            const endYear = (parseFloat(params.endYear, 10) || 2000) + 0.99;
             const mode = params.mode === "true";
 
             filtered = quizData.filter(q => {
