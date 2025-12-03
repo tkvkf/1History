@@ -231,3 +231,42 @@ input[type="number"] {
         width: 100%;
     }
 }
+
+/* end.html - 틀린 문제 목록 스타일 */
+.end-wrongs {
+    margin-top: 16px;
+}
+.end-wrongs ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.end-wrongs li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.end-wrongs .event {
+    flex: 1 1 auto;
+    text-align: left;
+    word-break: keep-all;
+}
+.end-wrongs .years {
+    flex: 0 0 auto;
+    min-width: 160px;
+    text-align: right;
+    white-space: nowrap;
+    color: #cfcfcf;
+    font-weight: normal;
+    font-size: 0.95rem;
+}
+/* 모바일에서 연도 영역이 너무 좁을 경우 줄바꿈 */
+@media (max-width: 480px) {
+    .end-wrongs .years {
+        min-width: 120px;
+        font-size: 0.9rem;
+    }
+}

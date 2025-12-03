@@ -27,6 +27,7 @@
         let answered = false;
         let filtered = [];
         let score = 0;
+        let wrongAnswers = [];
 
         fetch("data.json")
             .then(response => response.json())
@@ -49,6 +50,7 @@
         }
 
         function startQuiz() {
+            sessionStorage.removeItem('wrongAnswers');
             const params = getQueryParams();
             const tag = params.tag || "all";
             const selectedTags = tag === "all" ? ["all"] : tag.split(",");
@@ -122,6 +124,12 @@
                 document.getElementById('result').innerHTML = `정답입니다!<br>${current + 1} / ${filtered.length}`; score++;
             } else {
                 document.getElementById('result').innerHTML = `오답입니다. 정답: ${filtered[current].year}<br>${current + 1} / ${filtered.length}`;
+                wrongAnswers.push({
+                    index: current,
+                    event: filtered[current].event,
+                    correct: filtered[current].year,
+                    answer: userAnswer
+                });
             }
             answered = true;
             document.getElementById('submitBtn').style.display = "none";
@@ -140,7 +148,8 @@
         }
 
         function endQuiz() {
-            window.location.href = `end.html?score=${encodeURIComponent(score)}&total=${encodeURIComponent(filtered.length)}`;
+            sessionStorage.setItem('wrongAnswers', JSON.stringify(wrongAnswers));
+             window.location.href = `end.html?score=${encodeURIComponent(score)}&total=${encodeURIComponent(filtered.length)}`;
         }
     </script>
 </body>

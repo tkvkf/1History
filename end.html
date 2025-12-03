@@ -22,6 +22,41 @@
 
             document.getElementById('score').innerHTML = `총 ${total}문제 중 ${score}문제 맞히셨습니다!<br><br>정답률: ${parseFloat(((score / total) * 100).toFixed(1))}%`;
 
+            const raw = sessionStorage.getItem('wrongAnswers');
+            const container = document.createElement('div');
+            container.className = 'end-wrongs';
+            if (!raw) {
+                container.textContent = '틀린 문제가 없습니다.';
+            } else {
+                try {
+                    const wrongs = JSON.parse(raw);
+                    if (wrongs.length === 0) {
+                        container.textContent = '틀린 문제가 없습니다.';
+                    } else {
+                        const ul = document.createElement('ul');
+                        wrongs.forEach(w => {
+                            const li = document.createElement('li');
+                            const left = document.createElement('div');
+                            left.className = 'event';
+                            left.textContent = `"${w.event}"`;
+
+                            const right = document.createElement('div');
+                            right.className = 'years';
+                            right.textContent = `정답: ${w.correct} / 오답: ${w.answer}`;
+
+                            li.appendChild(left);
+                            li.appendChild(right);
+                            ul.appendChild(li);
+                        });
+                        container.appendChild(ul);
+                    }
+                } catch (e) {
+                    container.textContent = '틀린 문제를 불러오는 중 오류가 발생했습니다.';
+                    console.error(e);
+                }
+            }
+            document.getElementById('score').parentNode.insertBefore(container, document.getElementById('score').nextSibling);
+
             function goHome() {
                 window.location.href = "index.html";
             }
